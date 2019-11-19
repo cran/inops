@@ -1,0 +1,1031 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+
+
+<title>inops vignette</title>
+
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css" data-origin="pandoc">
+a.sourceLine { display: inline-block; line-height: 1.25; }
+a.sourceLine { pointer-events: none; color: inherit; text-decoration: inherit; }
+a.sourceLine:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode { white-space: pre; position: relative; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+code.sourceCode { white-space: pre-wrap; }
+a.sourceLine { text-indent: -1em; padding-left: 1em; }
+}
+pre.numberSource a.sourceLine
+  { position: relative; left: -4em; }
+pre.numberSource a.sourceLine::before
+  { content: attr(title);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; pointer-events: all; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {  }
+@media screen {
+a.sourceLine::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    for (var j = 0; j < rules.length; j++) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") continue;
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') continue;
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#header {
+text-align: center;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; }  code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">inops vignette</h1>
+
+
+
+<!-- README.md is generated from README.Rmd. Please edit that file -->
+<div id="inops" class="section level1">
+<h1>inops</h1>
+<p>Package implementing additional infix operators for R.</p>
+<p>Implemented operators work with 4 different value types: <strong>sets</strong>, <strong>intervals</strong>, <strong>regular expressions</strong>, and <strong>counts</strong>.<br />
+And provide 3 distinct functionalities: <strong>detection</strong>, <strong>subsetting</strong>, and <strong>replacement</strong>.</p>
+<p>Install using the <code>remotes</code> package:</p>
+<pre><code>remotes::install_github(&quot;moodymudskipper/inops&quot;)</code></pre>
+<div id="syntax" class="section level2">
+<h2>Syntax</h2>
+<p>All operators have the same form composed of two distinct parts: <code>%&lt;operation&gt;&lt;type&gt;%</code>.</p>
+<ul>
+<li><code>[operation]</code> specifies the performed functionality and can be one of <code>in</code>, <code>out</code>, <code>[in</code>, <code>[out</code>.</li>
+<li><code>[type]</code> specifies the type of operation and can be one of <code>{}</code>, <code>[]</code>, <code>()</code>, <code>[)</code>, <code>(]</code>, <code>~</code>, <code>~p</code>, <code>~f</code>, <code>#</code>.</li>
+</ul>
+</div>
+<div id="value-types" class="section level2">
+<h2>Value Types</h2>
+<ol style="list-style-type: decimal">
+<li><strong>sets</strong></li>
+</ol>
+<pre><code> %in{}%
+%out{}%</code></pre>
+<p>Work with the same values as <code>%in%</code> does but provide a more consistent behaviour for <code>data.frames</code> and <code>NA</code> values.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb3-1" title="1">letters &lt;-<span class="st"> </span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">10</span>]</a>
+<a class="sourceLine" id="cb3-2" title="2">letters</a>
+<a class="sourceLine" id="cb3-3" title="3"><span class="co">#&gt;  [1] &quot;a&quot; &quot;b&quot; &quot;c&quot; &quot;d&quot; &quot;e&quot; &quot;f&quot; &quot;g&quot; &quot;h&quot; &quot;i&quot; &quot;j&quot;</span></a>
+<a class="sourceLine" id="cb3-4" title="4"></a>
+<a class="sourceLine" id="cb3-5" title="5"><span class="co"># sets</span></a>
+<a class="sourceLine" id="cb3-6" title="6"></a>
+<a class="sourceLine" id="cb3-7" title="7">letters <span class="op">%in{}%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;e&quot;</span>)</a>
+<a class="sourceLine" id="cb3-8" title="8"><span class="co">#&gt;  [1]  TRUE  TRUE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb3-9" title="9"></a>
+<a class="sourceLine" id="cb3-10" title="10">letters <span class="op">%out{}%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>, <span class="st">&quot;e&quot;</span>)</a>
+<a class="sourceLine" id="cb3-11" title="11"><span class="co">#&gt;  [1] FALSE FALSE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</span></a></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>ranges</strong></li>
+</ol>
+<pre><code> %in()%   %in[]%   %in[)%   %in(]%
+%out()%  %out[]%  %out[)%  %out(]%</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb5-1" title="1"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb5-2" title="2"><span class="co">#&gt;  [1]  1  2  3  4  5  6  7  8  9 10</span></a>
+<a class="sourceLine" id="cb5-3" title="3"></a>
+<a class="sourceLine" id="cb5-4" title="4"><span class="co"># closed interval</span></a>
+<a class="sourceLine" id="cb5-5" title="5"></a>
+<a class="sourceLine" id="cb5-6" title="6"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span> <span class="op">%in()%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb5-7" title="7"><span class="co">#&gt;  [1] FALSE FALSE FALSE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb5-8" title="8"></a>
+<a class="sourceLine" id="cb5-9" title="9"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span> <span class="op">%out()%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb5-10" title="10"><span class="co">#&gt;  [1]  TRUE  TRUE  TRUE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</span></a>
+<a class="sourceLine" id="cb5-11" title="11"></a>
+<a class="sourceLine" id="cb5-12" title="12"><span class="co"># open interval</span></a>
+<a class="sourceLine" id="cb5-13" title="13"></a>
+<a class="sourceLine" id="cb5-14" title="14"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span> <span class="op">%in[]%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb5-15" title="15"><span class="co">#&gt;  [1] FALSE FALSE  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb5-16" title="16"></a>
+<a class="sourceLine" id="cb5-17" title="17"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span> <span class="op">%out[]%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb5-18" title="18"><span class="co">#&gt;  [1]  TRUE  TRUE FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE</span></a>
+<a class="sourceLine" id="cb5-19" title="19"></a>
+<a class="sourceLine" id="cb5-20" title="20"><span class="co"># open on the right</span></a>
+<a class="sourceLine" id="cb5-21" title="21"></a>
+<a class="sourceLine" id="cb5-22" title="22"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span> <span class="op">%in(]%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb5-23" title="23"><span class="co">#&gt;  [1] FALSE FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb5-24" title="24"></a>
+<a class="sourceLine" id="cb5-25" title="25"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span> <span class="op">%out(]%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb5-26" title="26"><span class="co">#&gt;  [1]  TRUE  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE</span></a>
+<a class="sourceLine" id="cb5-27" title="27"></a>
+<a class="sourceLine" id="cb5-28" title="28"><span class="co"># open on the left</span></a>
+<a class="sourceLine" id="cb5-29" title="29"></a>
+<a class="sourceLine" id="cb5-30" title="30"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span> <span class="op">%in[)%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb5-31" title="31"><span class="co">#&gt;  [1] FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb5-32" title="32"></a>
+<a class="sourceLine" id="cb5-33" title="33"><span class="dv">1</span><span class="op">:</span><span class="dv">10</span> <span class="op">%out[)%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">3</span>,<span class="dv">6</span>)</a>
+<a class="sourceLine" id="cb5-34" title="34"><span class="co">#&gt;  [1]  TRUE  TRUE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE</span></a></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>patterns</strong></li>
+</ol>
+<pre><code> %in~%   %in~f%   %in~p%
+%out~%  %out~f%  %out~p%</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb7-1" title="1">month.name</a>
+<a class="sourceLine" id="cb7-2" title="2"><span class="co">#&gt;  [1] &quot;January&quot;   &quot;February&quot;  &quot;March&quot;     &quot;April&quot;     &quot;May&quot;      </span></a>
+<a class="sourceLine" id="cb7-3" title="3"><span class="co">#&gt;  [6] &quot;June&quot;      &quot;July&quot;      &quot;August&quot;    &quot;September&quot; &quot;October&quot;  </span></a>
+<a class="sourceLine" id="cb7-4" title="4"><span class="co">#&gt; [11] &quot;November&quot;  &quot;December&quot;</span></a>
+<a class="sourceLine" id="cb7-5" title="5"></a>
+<a class="sourceLine" id="cb7-6" title="6"><span class="co"># regular expressions</span></a>
+<a class="sourceLine" id="cb7-7" title="7"></a>
+<a class="sourceLine" id="cb7-8" title="8">month.name <span class="op">%in~%</span><span class="st"> &quot;^M.*&quot;</span></a>
+<a class="sourceLine" id="cb7-9" title="9"><span class="co">#&gt;  [1] FALSE FALSE  TRUE FALSE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb7-10" title="10"><span class="co">#&gt; [12] FALSE</span></a>
+<a class="sourceLine" id="cb7-11" title="11"></a>
+<a class="sourceLine" id="cb7-12" title="12">month.name <span class="op">%out~%</span><span class="st"> &quot;^M.*&quot;</span></a>
+<a class="sourceLine" id="cb7-13" title="13"><span class="co">#&gt;  [1]  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</span></a>
+<a class="sourceLine" id="cb7-14" title="14"><span class="co">#&gt; [12]  TRUE</span></a>
+<a class="sourceLine" id="cb7-15" title="15"></a>
+<a class="sourceLine" id="cb7-16" title="16"><span class="co"># fixed string regular expressions</span></a>
+<a class="sourceLine" id="cb7-17" title="17"></a>
+<a class="sourceLine" id="cb7-18" title="18">month.name <span class="op">%in~f%</span><span class="st"> &quot;^M.*&quot;</span></a>
+<a class="sourceLine" id="cb7-19" title="19"><span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb7-20" title="20"><span class="co">#&gt; [12] FALSE</span></a>
+<a class="sourceLine" id="cb7-21" title="21"></a>
+<a class="sourceLine" id="cb7-22" title="22">month.name <span class="op">%out~f%</span><span class="st"> &quot;^M.*&quot;</span></a>
+<a class="sourceLine" id="cb7-23" title="23"><span class="co">#&gt;  [1]  TRUE  TRUE FALSE  TRUE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</span></a>
+<a class="sourceLine" id="cb7-24" title="24"><span class="co">#&gt; [12]  TRUE</span></a>
+<a class="sourceLine" id="cb7-25" title="25"></a>
+<a class="sourceLine" id="cb7-26" title="26"><span class="co"># perl regular expressions</span></a>
+<a class="sourceLine" id="cb7-27" title="27"></a>
+<a class="sourceLine" id="cb7-28" title="28">month.name <span class="op">%in~p%</span><span class="st"> &quot;^(?=.*r)(?!.*er)&quot;</span></a>
+<a class="sourceLine" id="cb7-29" title="29"><span class="co">#&gt;  [1]  TRUE  TRUE  TRUE  TRUE FALSE FALSE FALSE FALSE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb7-30" title="30"><span class="co">#&gt; [12] FALSE</span></a>
+<a class="sourceLine" id="cb7-31" title="31"></a>
+<a class="sourceLine" id="cb7-32" title="32">month.name <span class="op">%out~p%</span><span class="st"> &quot;^(?=.*r)(?!.*er)&quot;</span></a>
+<a class="sourceLine" id="cb7-33" title="33"><span class="co">#&gt;  [1] FALSE FALSE FALSE FALSE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE  TRUE</span></a>
+<a class="sourceLine" id="cb7-34" title="34"><span class="co">#&gt; [12]  TRUE</span></a></code></pre></div>
+<ol start="4" style="list-style-type: decimal">
+<li><strong>counts</strong></li>
+</ol>
+<pre><code> %in#%
+%out#%</code></pre>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb9-1" title="1">values &lt;-<span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;a&quot;</span>, <span class="st">&quot;a&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;b&quot;</span>, <span class="st">&quot;c&quot;</span>)</a>
+<a class="sourceLine" id="cb9-2" title="2">values</a>
+<a class="sourceLine" id="cb9-3" title="3"><span class="co">#&gt; [1] &quot;a&quot; &quot;a&quot; &quot;b&quot; &quot;b&quot; &quot;b&quot; &quot;c&quot;</span></a>
+<a class="sourceLine" id="cb9-4" title="4"></a>
+<a class="sourceLine" id="cb9-5" title="5"><span class="co"># number of occurances</span></a>
+<a class="sourceLine" id="cb9-6" title="6"></a>
+<a class="sourceLine" id="cb9-7" title="7">values <span class="op">%in#%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb9-8" title="8"><span class="co">#&gt; [1]  TRUE  TRUE FALSE FALSE FALSE  TRUE</span></a>
+<a class="sourceLine" id="cb9-9" title="9"></a>
+<a class="sourceLine" id="cb9-10" title="10">values <span class="op">%out#%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb9-11" title="11"><span class="co">#&gt; [1] FALSE FALSE  TRUE  TRUE  TRUE FALSE</span></a></code></pre></div>
+</div>
+<div id="operations" class="section level2">
+<h2>Operations</h2>
+<ol style="list-style-type: decimal">
+<li><strong>detection</strong></li>
+</ol>
+<p>Same form as examples shown above.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb10-1" title="1">month.name</a>
+<a class="sourceLine" id="cb10-2" title="2"><span class="co">#&gt;  [1] &quot;January&quot;   &quot;February&quot;  &quot;March&quot;     &quot;April&quot;     &quot;May&quot;      </span></a>
+<a class="sourceLine" id="cb10-3" title="3"><span class="co">#&gt;  [6] &quot;June&quot;      &quot;July&quot;      &quot;August&quot;    &quot;September&quot; &quot;October&quot;  </span></a>
+<a class="sourceLine" id="cb10-4" title="4"><span class="co">#&gt; [11] &quot;November&quot;  &quot;December&quot;</span></a>
+<a class="sourceLine" id="cb10-5" title="5"></a>
+<a class="sourceLine" id="cb10-6" title="6">month.name <span class="op">%in~%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;^A&quot;</span>, <span class="st">&quot;^M&quot;</span>)</a>
+<a class="sourceLine" id="cb10-7" title="7"><span class="co">#&gt;  [1] FALSE FALSE  TRUE  TRUE  TRUE FALSE FALSE  TRUE FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb10-8" title="8"><span class="co">#&gt; [12] FALSE</span></a></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li><strong>subsetting</strong></li>
+</ol>
+<p>Used for obtaining actual values.<br />
+Starts with <code>[</code>.</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb11-1" title="1">month.name</a>
+<a class="sourceLine" id="cb11-2" title="2"><span class="co">#&gt;  [1] &quot;January&quot;   &quot;February&quot;  &quot;March&quot;     &quot;April&quot;     &quot;May&quot;      </span></a>
+<a class="sourceLine" id="cb11-3" title="3"><span class="co">#&gt;  [6] &quot;June&quot;      &quot;July&quot;      &quot;August&quot;    &quot;September&quot; &quot;October&quot;  </span></a>
+<a class="sourceLine" id="cb11-4" title="4"><span class="co">#&gt; [11] &quot;November&quot;  &quot;December&quot;</span></a>
+<a class="sourceLine" id="cb11-5" title="5"></a>
+<a class="sourceLine" id="cb11-6" title="6">month.name <span class="op">%[in~%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;^A&quot;</span>, <span class="st">&quot;^M&quot;</span>)</a>
+<a class="sourceLine" id="cb11-7" title="7"><span class="co">#&gt; [1] &quot;March&quot;  &quot;April&quot;  &quot;May&quot;    &quot;August&quot;</span></a></code></pre></div>
+<ol start="3" style="list-style-type: decimal">
+<li><strong>replacement</strong></li>
+</ol>
+<p>Used for replacing the matched elements with new values.<br />
+Called with assignment <code>&lt;-</code> at the end.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb12-1" title="1">month.name</a>
+<a class="sourceLine" id="cb12-2" title="2"><span class="co">#&gt;  [1] &quot;January&quot;   &quot;February&quot;  &quot;March&quot;     &quot;April&quot;     &quot;May&quot;      </span></a>
+<a class="sourceLine" id="cb12-3" title="3"><span class="co">#&gt;  [6] &quot;June&quot;      &quot;July&quot;      &quot;August&quot;    &quot;September&quot; &quot;October&quot;  </span></a>
+<a class="sourceLine" id="cb12-4" title="4"><span class="co">#&gt; [11] &quot;November&quot;  &quot;December&quot;</span></a>
+<a class="sourceLine" id="cb12-5" title="5"></a>
+<a class="sourceLine" id="cb12-6" title="6">month.name <span class="op">%in~%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;^A&quot;</span>, <span class="st">&quot;^M&quot;</span>) &lt;-<span class="st"> &quot;A or M&quot;</span></a>
+<a class="sourceLine" id="cb12-7" title="7"></a>
+<a class="sourceLine" id="cb12-8" title="8">month.name</a>
+<a class="sourceLine" id="cb12-9" title="9"><span class="co">#&gt;  [1] &quot;January&quot;   &quot;February&quot;  &quot;A or M&quot;    &quot;A or M&quot;    &quot;A or M&quot;   </span></a>
+<a class="sourceLine" id="cb12-10" title="10"><span class="co">#&gt;  [6] &quot;June&quot;      &quot;July&quot;      &quot;A or M&quot;    &quot;September&quot; &quot;October&quot;  </span></a>
+<a class="sourceLine" id="cb12-11" title="11"><span class="co">#&gt; [11] &quot;November&quot;  &quot;December&quot;</span></a></code></pre></div>
+</div>
+<div id="behaviour" class="section level2">
+<h2>Behaviour</h2>
+<p>The operators implemented here try to be consistent with the default comparison operators like <code>==</code> and <code>&lt;</code>.<br />
+Therefore in some scenarios their behaviour differs from <code>%in%</code>.<br />
+For instance:</p>
+<ol style="list-style-type: decimal">
+<li><code>%in{}%</code> can be used on on data frames.</li>
+</ol>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb13-1" title="1">df1 &lt;-<span class="st"> </span><span class="kw">data.frame</span>(<span class="dt">a =</span> <span class="dv">1</span><span class="op">:</span><span class="dv">3</span>, <span class="dt">b =</span> <span class="dv">2</span><span class="op">:</span><span class="dv">4</span>, <span class="dt">c=</span>letters[<span class="dv">1</span><span class="op">:</span><span class="dv">3</span>])</a>
+<a class="sourceLine" id="cb13-2" title="2"></a>
+<a class="sourceLine" id="cb13-3" title="3">df1 <span class="op">==</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb13-4" title="4"><span class="co">#&gt;          a     b     c</span></a>
+<a class="sourceLine" id="cb13-5" title="5"><span class="co">#&gt; [1,] FALSE  TRUE FALSE</span></a>
+<a class="sourceLine" id="cb13-6" title="6"><span class="co">#&gt; [2,]  TRUE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb13-7" title="7"><span class="co">#&gt; [3,] FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb13-8" title="8"></a>
+<a class="sourceLine" id="cb13-9" title="9">df1 <span class="op">%in%</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb13-10" title="10"><span class="co">#&gt; [1] FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb13-11" title="11"></a>
+<a class="sourceLine" id="cb13-12" title="12">df1 <span class="op">%in{}%</span><span class="st"> </span><span class="dv">2</span></a>
+<a class="sourceLine" id="cb13-13" title="13"><span class="co">#&gt;          a     b     c</span></a>
+<a class="sourceLine" id="cb13-14" title="14"><span class="co">#&gt; [1,] FALSE  TRUE FALSE</span></a>
+<a class="sourceLine" id="cb13-15" title="15"><span class="co">#&gt; [2,]  TRUE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb13-16" title="16"><span class="co">#&gt; [3,] FALSE FALSE FALSE</span></a>
+<a class="sourceLine" id="cb13-17" title="17"></a>
+<a class="sourceLine" id="cb13-18" title="18">df1 <span class="op">%in{}%</span><span class="st"> </span><span class="dv">2</span><span class="op">:</span><span class="dv">3</span></a>
+<a class="sourceLine" id="cb13-19" title="19"><span class="co">#&gt;          a     b     c</span></a>
+<a class="sourceLine" id="cb13-20" title="20"><span class="co">#&gt; [1,] FALSE  TRUE FALSE</span></a>
+<a class="sourceLine" id="cb13-21" title="21"><span class="co">#&gt; [2,]  TRUE  TRUE FALSE</span></a>
+<a class="sourceLine" id="cb13-22" title="22"><span class="co">#&gt; [3,]  TRUE FALSE FALSE</span></a></code></pre></div>
+<ol start="2" style="list-style-type: decimal">
+<li>missing values are not considered as not matching.</li>
+</ol>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb14-1" title="1"><span class="ot">NA</span> <span class="op">==</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb14-2" title="2"><span class="co">#&gt; [1] NA</span></a>
+<a class="sourceLine" id="cb14-3" title="3"></a>
+<a class="sourceLine" id="cb14-4" title="4"><span class="ot">NA</span> <span class="op">%in%</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb14-5" title="5"><span class="co">#&gt; [1] FALSE</span></a>
+<a class="sourceLine" id="cb14-6" title="6"></a>
+<a class="sourceLine" id="cb14-7" title="7"><span class="ot">NA</span> <span class="op">%in{}%</span><span class="st"> </span><span class="dv">1</span></a>
+<a class="sourceLine" id="cb14-8" title="8"><span class="co">#&gt; [1] NA</span></a>
+<a class="sourceLine" id="cb14-9" title="9"></a>
+<a class="sourceLine" id="cb14-10" title="10"><span class="ot">NA</span> <span class="op">%in%</span><span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb14-11" title="11"><span class="co">#&gt; [1] TRUE</span></a>
+<a class="sourceLine" id="cb14-12" title="12"></a>
+<a class="sourceLine" id="cb14-13" title="13"><span class="ot">NA</span> <span class="op">%in{}%</span><span class="st"> </span><span class="ot">NA</span></a>
+<a class="sourceLine" id="cb14-14" title="14"><span class="co">#&gt; [1] NA</span></a>
+<a class="sourceLine" id="cb14-15" title="15"></a>
+<a class="sourceLine" id="cb14-16" title="16"><span class="kw">c</span>(<span class="dv">1</span>, <span class="ot">NA</span>, <span class="dv">3</span>) <span class="op">%in{}%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">10</span></a>
+<a class="sourceLine" id="cb14-17" title="17"><span class="co">#&gt; [1] TRUE   NA TRUE</span></a></code></pre></div>
+</div>
+<div id="additional-examples" class="section level2">
+<h2>Additional Examples</h2>
+<p>Simple examples for illustration.</p>
+<hr />
+<p>Selecting flight records from the <code>flights</code> dataset that:</p>
+<ol style="list-style-type: decimal">
+<li>Departed and Landed between noon and 5 p.m.</li>
+<li>Were not traveling to “LEX”, “PSP”, nor “HDN”</li>
+<li>Travelled distance was either very short (below 100) or very long (above 3000)</li>
+<li>Had a tail number starting with “N1” or “N3”</li>
+</ol>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb15-1" title="1"><span class="kw">library</span>(nycflights13)</a>
+<a class="sourceLine" id="cb15-2" title="2"><span class="kw">library</span>(dplyr)</a>
+<a class="sourceLine" id="cb15-3" title="3"><span class="kw">library</span>(inops)</a>
+<a class="sourceLine" id="cb15-4" title="4"></a>
+<a class="sourceLine" id="cb15-5" title="5">flights &lt;-<span class="st"> </span><span class="kw">select</span>(flights, origin, dest, tailnum, dep_time, arr_time, distance)</a>
+<a class="sourceLine" id="cb15-6" title="6">flights</a>
+<a class="sourceLine" id="cb15-7" title="7"><span class="co">#&gt; # A tibble: 336,776 x 6</span></a>
+<a class="sourceLine" id="cb15-8" title="8"><span class="co">#&gt;    origin dest  tailnum dep_time arr_time distance</span></a>
+<a class="sourceLine" id="cb15-9" title="9"><span class="co">#&gt;    &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;      &lt;int&gt;    &lt;int&gt;    &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb15-10" title="10"><span class="co">#&gt;  1 EWR    IAH   N14228       517      830     1400</span></a>
+<a class="sourceLine" id="cb15-11" title="11"><span class="co">#&gt;  2 LGA    IAH   N24211       533      850     1416</span></a>
+<a class="sourceLine" id="cb15-12" title="12"><span class="co">#&gt;  3 JFK    MIA   N619AA       542      923     1089</span></a>
+<a class="sourceLine" id="cb15-13" title="13"><span class="co">#&gt;  4 JFK    BQN   N804JB       544     1004     1576</span></a>
+<a class="sourceLine" id="cb15-14" title="14"><span class="co">#&gt;  5 LGA    ATL   N668DN       554      812      762</span></a>
+<a class="sourceLine" id="cb15-15" title="15"><span class="co">#&gt;  6 EWR    ORD   N39463       554      740      719</span></a>
+<a class="sourceLine" id="cb15-16" title="16"><span class="co">#&gt;  7 EWR    FLL   N516JB       555      913     1065</span></a>
+<a class="sourceLine" id="cb15-17" title="17"><span class="co">#&gt;  8 LGA    IAD   N829AS       557      709      229</span></a>
+<a class="sourceLine" id="cb15-18" title="18"><span class="co">#&gt;  9 JFK    MCO   N593JB       557      838      944</span></a>
+<a class="sourceLine" id="cb15-19" title="19"><span class="co">#&gt; 10 LGA    ORD   N3ALAA       558      753      733</span></a>
+<a class="sourceLine" id="cb15-20" title="20"><span class="co">#&gt; # ... with 336,766 more rows</span></a>
+<a class="sourceLine" id="cb15-21" title="21"></a>
+<a class="sourceLine" id="cb15-22" title="22"><span class="kw">filter</span>(flights,</a>
+<a class="sourceLine" id="cb15-23" title="23">       dep_time <span class="op">%in()%</span><span class="st">  </span><span class="kw">c</span>(<span class="dv">1200</span>, <span class="dv">1700</span>),</a>
+<a class="sourceLine" id="cb15-24" title="24">       arr_time <span class="op">%in()%</span><span class="st">  </span><span class="kw">c</span>(<span class="dv">1200</span>, <span class="dv">1700</span>),</a>
+<a class="sourceLine" id="cb15-25" title="25">       dest     <span class="op">%out%</span><span class="st">   </span><span class="kw">c</span>(<span class="st">&quot;LEX&quot;</span>, <span class="st">&quot;PSP&quot;</span>, <span class="st">&quot;HDN&quot;</span>),</a>
+<a class="sourceLine" id="cb15-26" title="26">       distance <span class="op">%out[]%</span><span class="st"> </span><span class="kw">c</span>(<span class="dv">100</span>, <span class="dv">3000</span>),</a>
+<a class="sourceLine" id="cb15-27" title="27">       tailnum  <span class="op">%in~%</span><span class="st">   </span><span class="kw">c</span>(<span class="st">&quot;^N1&quot;</span>, <span class="st">&quot;^N3&quot;</span>)</a>
+<a class="sourceLine" id="cb15-28" title="28">       )</a>
+<a class="sourceLine" id="cb15-29" title="29"><span class="co">#&gt; # A tibble: 2 x 6</span></a>
+<a class="sourceLine" id="cb15-30" title="30"><span class="co">#&gt;   origin dest  tailnum dep_time arr_time distance</span></a>
+<a class="sourceLine" id="cb15-31" title="31"><span class="co">#&gt;   &lt;chr&gt;  &lt;chr&gt; &lt;chr&gt;      &lt;int&gt;    &lt;int&gt;    &lt;dbl&gt;</span></a>
+<a class="sourceLine" id="cb15-32" title="32"><span class="co">#&gt; 1 EWR    PHL   N14972      1240     1333       80</span></a>
+<a class="sourceLine" id="cb15-33" title="33"><span class="co">#&gt; 2 JFK    HNL   N391HA      1214     1645     4983</span></a></code></pre></div>
+<hr />
+<p>Cleaning up <code>planes</code> dataset in order to:</p>
+<ol style="list-style-type: decimal">
+<li>Standardize names of “AIRBUS”, “CANADAIR” and “MCDONNELL” manufacturers.</li>
+<li>Obtain plane counts for each of the 3 manufacturers mentioned above.</li>
+</ol>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb16-1" title="1"><span class="kw">library</span>(nycflights13)</a>
+<a class="sourceLine" id="cb16-2" title="2"><span class="kw">library</span>(inops)</a>
+<a class="sourceLine" id="cb16-3" title="3"></a>
+<a class="sourceLine" id="cb16-4" title="4"><span class="kw">table</span>(planes<span class="op">$</span>manufacturer <span class="op">%[in~%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AIRBUS&quot;</span>, <span class="st">&quot;CANADAIR&quot;</span>, <span class="st">&quot;MCDONNELL&quot;</span>))</a>
+<a class="sourceLine" id="cb16-5" title="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb16-6" title="6"><span class="co">#&gt;                        AIRBUS              AIRBUS INDUSTRIE </span></a>
+<a class="sourceLine" id="cb16-7" title="7"><span class="co">#&gt;                           336                           400 </span></a>
+<a class="sourceLine" id="cb16-8" title="8"><span class="co">#&gt;                      CANADAIR                  CANADAIR LTD </span></a>
+<a class="sourceLine" id="cb16-9" title="9"><span class="co">#&gt;                             9                             1 </span></a>
+<a class="sourceLine" id="cb16-10" title="10"><span class="co">#&gt;             MCDONNELL DOUGLAS MCDONNELL DOUGLAS AIRCRAFT CO </span></a>
+<a class="sourceLine" id="cb16-11" title="11"><span class="co">#&gt;                           120                           103 </span></a>
+<a class="sourceLine" id="cb16-12" title="12"><span class="co">#&gt; MCDONNELL DOUGLAS CORPORATION </span></a>
+<a class="sourceLine" id="cb16-13" title="13"><span class="co">#&gt;                            14</span></a>
+<a class="sourceLine" id="cb16-14" title="14"></a>
+<a class="sourceLine" id="cb16-15" title="15">planes<span class="op">$</span>manufacturer <span class="op">%in~%</span><span class="st"> &quot;AIRBUS&quot;</span>    &lt;-<span class="st"> &quot;AIRBUS&quot;</span></a>
+<a class="sourceLine" id="cb16-16" title="16">planes<span class="op">$</span>manufacturer <span class="op">%in~%</span><span class="st"> &quot;CANADAIR&quot;</span>  &lt;-<span class="st"> &quot;CANADAIR&quot;</span></a>
+<a class="sourceLine" id="cb16-17" title="17">planes<span class="op">$</span>manufacturer <span class="op">%in~%</span><span class="st"> &quot;MCDONNELL&quot;</span> &lt;-<span class="st"> &quot;MCDONNELL&quot;</span></a>
+<a class="sourceLine" id="cb16-18" title="18"></a>
+<a class="sourceLine" id="cb16-19" title="19"><span class="kw">table</span>(planes<span class="op">$</span>manufacturer <span class="op">%[in~%</span><span class="st"> </span><span class="kw">c</span>(<span class="st">&quot;AIRBUS&quot;</span>, <span class="st">&quot;CANADAIR&quot;</span>, <span class="st">&quot;MCDONNELL&quot;</span>))</a>
+<a class="sourceLine" id="cb16-20" title="20"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb16-21" title="21"><span class="co">#&gt;    AIRBUS  CANADAIR MCDONNELL </span></a>
+<a class="sourceLine" id="cb16-22" title="22"><span class="co">#&gt;       736        10       237</span></a></code></pre></div>
+<hr />
+<p>Combine engine models that in the dataset occur less than 6 times under the “Other” group.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><a class="sourceLine" id="cb17-1" title="1"><span class="kw">library</span>(nycflights13)</a>
+<a class="sourceLine" id="cb17-2" title="2"><span class="kw">library</span>(inops)</a>
+<a class="sourceLine" id="cb17-3" title="3"></a>
+<a class="sourceLine" id="cb17-4" title="4"><span class="kw">table</span>(planes<span class="op">$</span>engine)</a>
+<a class="sourceLine" id="cb17-5" title="5"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb17-6" title="6"><span class="co">#&gt;       4 Cycle Reciprocating     Turbo-fan     Turbo-jet    Turbo-prop </span></a>
+<a class="sourceLine" id="cb17-7" title="7"><span class="co">#&gt;             2            28          2750           535             2 </span></a>
+<a class="sourceLine" id="cb17-8" title="8"><span class="co">#&gt;   Turbo-shaft </span></a>
+<a class="sourceLine" id="cb17-9" title="9"><span class="co">#&gt;             5</span></a>
+<a class="sourceLine" id="cb17-10" title="10"></a>
+<a class="sourceLine" id="cb17-11" title="11">planes<span class="op">$</span>engine <span class="op">%in#%</span><span class="st"> </span><span class="dv">1</span><span class="op">:</span><span class="dv">5</span> &lt;-<span class="st"> &quot;Other&quot;</span></a>
+<a class="sourceLine" id="cb17-12" title="12"></a>
+<a class="sourceLine" id="cb17-13" title="13"><span class="kw">table</span>(planes<span class="op">$</span>engine)</a>
+<a class="sourceLine" id="cb17-14" title="14"><span class="co">#&gt; </span></a>
+<a class="sourceLine" id="cb17-15" title="15"><span class="co">#&gt;         Other Reciprocating     Turbo-fan     Turbo-jet </span></a>
+<a class="sourceLine" id="cb17-16" title="16"><span class="co">#&gt;             9            28          2750           535</span></a></code></pre></div>
+<hr />
+</div>
+<div id="full-list" class="section level2">
+<h2>Full List</h2>
+<p>Below is a full list of all the implemented operators along with their usage examples.</p>
+<div id="detection-operators" class="section level3">
+<h3>Detection Operators</h3>
+<table>
+<colgroup>
+<col width="11%"></col>
+<col width="62%"></col>
+<col width="26%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>Form</th>
+<th>Description</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>%in{}%</code></td>
+<td>which elements are inside a set</td>
+<td><code>x %in{}% set</code></td>
+</tr>
+<tr class="even">
+<td><code>%in[]%</code></td>
+<td>which elements are inside a closed interval</td>
+<td><code>x %in[]% interval</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in()%</code></td>
+<td>which elements are inside an open interval</td>
+<td><code>x %in()% interval</code></td>
+</tr>
+<tr class="even">
+<td><code>%in[)%</code></td>
+<td>which elements are inside an interval open on the right</td>
+<td><code>x %in[)% interval</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in(]%</code></td>
+<td>which elements are inside an interval open on the left</td>
+<td><code>x %in(]% interval</code></td>
+</tr>
+<tr class="even">
+<td><code>%in~%</code></td>
+<td>which elements match a regular expression</td>
+<td><code>x %in~% pattern</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in~p%</code></td>
+<td>which elements match a regular perl expression</td>
+<td><code>x %in~p% pattern</code></td>
+</tr>
+<tr class="even">
+<td><code>%in~f%</code></td>
+<td>which elements match a regular fixed expression</td>
+<td><code>x %in~f% pattern</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in#%</code></td>
+<td>which elements occur a specified number of times</td>
+<td><code>x %in#% count</code></td>
+</tr>
+<tr class="even">
+<td><code>%out%</code></td>
+<td>which elements are outside a set (same as ! x %in% y)</td>
+<td><code>x %out% set</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out{}%</code></td>
+<td>which elements are outside a set</td>
+<td><code>x %out{}% set</code></td>
+</tr>
+<tr class="even">
+<td><code>%out[]%</code></td>
+<td>which elements are outside a closed interval</td>
+<td><code>x %out[]% interval</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out()%</code></td>
+<td>which elements are outside an open interval</td>
+<td><code>x %out()% interval</code></td>
+</tr>
+<tr class="even">
+<td><code>%out[)%</code></td>
+<td>which elements are outside an interval open on the right</td>
+<td><code>x %out[)% interval</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out(]%</code></td>
+<td>which elements are outside an interval open on the left</td>
+<td><code>x %out(]% interval</code></td>
+</tr>
+<tr class="even">
+<td><code>%out~%</code></td>
+<td>which elements do not match a regular expression</td>
+<td><code>x %out~% pattern</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out~p%</code></td>
+<td>which elements do not match a regular perl expression</td>
+<td><code>x %out~p% pattern</code></td>
+</tr>
+<tr class="even">
+<td><code>%out~f%</code></td>
+<td>which elements do not match a regular fixed expression</td>
+<td><code>x %out~f% pattern</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out#%</code></td>
+<td>which elements occur other than a specified number of times</td>
+<td><code>x %out#% count</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="subsetting-operators" class="section level3">
+<h3>Subsetting Operators</h3>
+<table>
+<colgroup>
+<col width="11%"></col>
+<col width="62%"></col>
+<col width="26%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>Form</th>
+<th>Description</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>%[in%</code></td>
+<td>select elements inside a set</td>
+<td><code>x %[in% set</code></td>
+</tr>
+<tr class="even">
+<td><code>%[in{}%</code></td>
+<td>select elements inside a set</td>
+<td><code>x %[in{}% set</code></td>
+</tr>
+<tr class="odd">
+<td><code>%[in[]%</code></td>
+<td>select elements inside a closed interval</td>
+<td><code>x %[in[]% interval</code></td>
+</tr>
+<tr class="even">
+<td><code>%[in()%</code></td>
+<td>select elements inside an open interval</td>
+<td><code>x %[in()% interval</code></td>
+</tr>
+<tr class="odd">
+<td><code>%[in[)%</code></td>
+<td>select elements inside an interval open on the right</td>
+<td><code>x %[in[)% interval</code></td>
+</tr>
+<tr class="even">
+<td><code>%[in(]%</code></td>
+<td>select elements inside an interval open on the left</td>
+<td><code>x %[in(]% interval</code></td>
+</tr>
+<tr class="odd">
+<td><code>%[in~%</code></td>
+<td>select elements matching a regular expression</td>
+<td><code>x %[in~% pattern</code></td>
+</tr>
+<tr class="even">
+<td><code>%[in~p%</code></td>
+<td>select elements matching a regular perl expression</td>
+<td><code>x %[in~p% pattern</code></td>
+</tr>
+<tr class="odd">
+<td><code>%[in~f%</code></td>
+<td>select elements matching a regular fixed expression</td>
+<td><code>x %[in~f% pattern</code></td>
+</tr>
+<tr class="even">
+<td><code>%[in#%</code></td>
+<td>select elements that occur a specified number of times</td>
+<td><code>x %[in#% count</code></td>
+</tr>
+<tr class="odd">
+<td><code>%[out%</code></td>
+<td>select elements outside a set</td>
+<td><code>x %[out%  set</code></td>
+</tr>
+<tr class="even">
+<td><code>%[out{}%</code></td>
+<td>select elements outside a set</td>
+<td><code>x %[out{}%  set</code></td>
+</tr>
+<tr class="odd">
+<td><code>%[out[]%</code></td>
+<td>select elements outside a closed interval</td>
+<td><code>x %[out[]% interval</code></td>
+</tr>
+<tr class="even">
+<td><code>%[out()%</code></td>
+<td>select elements outside an open interval</td>
+<td><code>x %[out()% interval</code></td>
+</tr>
+<tr class="odd">
+<td><code>%[out[)%</code></td>
+<td>select elements outside an interval open on the right</td>
+<td><code>x %[out[)% interval</code></td>
+</tr>
+<tr class="even">
+<td><code>%[out(]%</code></td>
+<td>select elements outside an interval open on the left</td>
+<td><code>x %[out(]% interval</code></td>
+</tr>
+<tr class="odd">
+<td><code>%[out~%</code></td>
+<td>select elements not matching a regular expression</td>
+<td><code>x %[out~% pattern</code></td>
+</tr>
+<tr class="even">
+<td><code>%[out~p%</code></td>
+<td>select elements not matching a regular perl expression</td>
+<td><code>x %[out~p% pattern</code></td>
+</tr>
+<tr class="odd">
+<td><code>%[out~f%</code></td>
+<td>select elements not matching a regular fixed expression</td>
+<td><code>x %[out~f% pattern</code></td>
+</tr>
+<tr class="even">
+<td><code>%[out#%</code></td>
+<td>select elements that occur other than specified number of times</td>
+<td><code>x %[out% count</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<div id="replacement-operators" class="section level3">
+<h3>Replacement Operators</h3>
+<table>
+<colgroup>
+<col width="11%"></col>
+<col width="62%"></col>
+<col width="26%"></col>
+</colgroup>
+<thead>
+<tr class="header">
+<th>Form</th>
+<th>Description</th>
+<th>Call</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><code>==&lt;-</code></td>
+<td>change elements equal to the provided value</td>
+<td><code>x == element &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>!=&lt;-</code></td>
+<td>change elements not equal to the provided value</td>
+<td><code>x != element &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>&gt;&lt;-</code></td>
+<td>change elements greater than the provided value</td>
+<td><code>x &gt; number &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;&lt;-</code></td>
+<td>change elements lower than the provided value</td>
+<td><code>x &lt; number  &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>&gt;=&lt;-</code></td>
+<td>change elements greater or equal to the provided value</td>
+<td><code>x &gt;= number &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>&lt;=&lt;-</code></td>
+<td>change elements lower or equal to the provided value</td>
+<td><code>x &lt;= number &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in%&lt;-</code></td>
+<td>change elements inside a set</td>
+<td><code>x %in% set &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%in{}%&lt;-</code></td>
+<td>change elements inside a set</td>
+<td><code>x %in{}% set &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in[]%&lt;-</code></td>
+<td>change elements inside a closed interval</td>
+<td><code>x %in[]% interval &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%in()%&lt;-</code></td>
+<td>change elements inside an open interval</td>
+<td><code>x %in()% interval &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in[)%&lt;-</code></td>
+<td>change elements inside an interval open on the right</td>
+<td><code>x %in[)% interval &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%in(]%&lt;-</code></td>
+<td>change elements inside an interval open on the left</td>
+<td><code>x %in(]% interval &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in~%&lt;-</code></td>
+<td>change elements matching a regular expression</td>
+<td><code>x %in~% pattern &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%in~p%&lt;-</code></td>
+<td>change elements matching a regular perl expression</td>
+<td><code>x %in~p% pattern &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%in~f%&lt;-</code></td>
+<td>change elements matching a regular fixed expression</td>
+<td><code>x %in~f% pattern &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%in#%&lt;-</code></td>
+<td>change elements that occur specified number of times</td>
+<td><code>x %in#% count &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out%&lt;-</code></td>
+<td>change elements outside a set</td>
+<td><code>x %out% set &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%out{}%&lt;-</code></td>
+<td>change elements outside a set</td>
+<td><code>x %out{}% set &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out[]%&lt;-</code></td>
+<td>change elements outside a closed interval</td>
+<td><code>x %out[]% interval &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%out()%&lt;-</code></td>
+<td>change elements outside an open interval</td>
+<td><code>x %out()% interval &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out[)%&lt;-</code></td>
+<td>change elements outside an interval open on the right</td>
+<td><code>x %out[)% interval &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%out(]%&lt;-</code></td>
+<td>change elements outside an interval open on the left</td>
+<td><code>x %out(]% interval &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out~%&lt;-</code></td>
+<td>change elements not matching a regular expression</td>
+<td><code>x %out~% pattern &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%out~p%&lt;-</code></td>
+<td>change elements not matching a regular perl expression</td>
+<td><code>x %out~p% pattern &lt;- value</code></td>
+</tr>
+<tr class="odd">
+<td><code>%out~f%&lt;-</code></td>
+<td>change elements not matching a regular fixed expression</td>
+<td><code>x %out~f% pattern &lt;- value</code></td>
+</tr>
+<tr class="even">
+<td><code>%out#%&lt;-</code></td>
+<td>change elements that occur other than specified number of times</td>
+<td><code>x %out#% count &lt;- value</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<div id="notes" class="section level2">
+<h2>Notes</h2>
+<p>To give an assignment counterpart to <code>&lt;</code> we had to overload the <code>&lt;&lt;-</code> operator, which explains the message when attaching the package. This doesn’t affect the behavior of the <code>&lt;&lt;-</code> assignments.</p>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
